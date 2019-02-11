@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_MD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\User;..\Core;..\Hal\inc;..\Driver</IncludePath>
+              <IncludePath>..\User;..\Core;..\Hal\inc;..\Driver\auto_charge;..\Driver\data_commun;..\Driver\encoder_data;..\Driver\imu_data;..\Driver\init_function;..\Driver\moto_control;..\Driver\power_manage</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -552,6 +552,43 @@
         </Group>
         <Group>
           <GroupName>Driver</GroupName>
+          <Files>
+            <File>
+              <FileName>auto_charge.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Driver\auto_charge\auto_charge.c</FilePath>
+            </File>
+            <File>
+              <FileName>data_commun.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Driver\data_commun\data_commun.c</FilePath>
+            </File>
+            <File>
+              <FileName>encoder_data.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Driver\encoder_data\encoder_data.c</FilePath>
+            </File>
+            <File>
+              <FileName>imu_data.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Driver\imu_data\imu_data.c</FilePath>
+            </File>
+            <File>
+              <FileName>init_function.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Driver\init_function\init_function.c</FilePath>
+            </File>
+            <File>
+              <FileName>moto_control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Driver\moto_control\moto_control.c</FilePath>
+            </File>
+            <File>
+              <FileName>power_manage.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Driver\power_manage\power_manage.c</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>
