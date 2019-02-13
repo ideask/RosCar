@@ -40,7 +40,7 @@ int main(void)
 	//周期0.05ms   频率20Khz
 	MotoControlTimInit(3199,0);
 	TIM3_SpeedCalculate_Init();//速度计算定时器初始化
-	//TIM1_OdomUpdate_Init();//里程计发布定时器初始化
+	TIM1_OdomUpdate_Init();//里程计发布定时器初始化
 	//配置全局中断优先级
 	NVIC_Configuration();
 	
@@ -111,7 +111,7 @@ int main(void)
 			USART_RX_STA=0;//清楚接收标志位
 		}
 
-		//car_control(rightdata.d,leftdata.d);	 //将接收到的左右轮速度赋给小车
-		car_control(-500,-500);
+		car_control(rightdata.d,leftdata.d);	 //将接收到的左右轮速度赋给小车
+		
 	}
 }

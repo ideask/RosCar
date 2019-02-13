@@ -47,10 +47,8 @@ float oriention_1=0;
 
 int span;//采集回来的左右轮速度差值
 s32 hSpeed_BufferL[SPEED_BUFFER_SIZE]={0}, hSpeed_BufferR[SPEED_BUFFER_SIZE]={0};//左右轮速度缓存数组
-unsigned int hRot_Speed_L;//左电机平均转速缓存
-unsigned int hRot_Speed_R;//右电机平均转速缓存
-unsigned int SpeedL=0; //左电机平均转速 r/min，PID调节
-unsigned int SpeedR=0; //右电机平均转速 r/min，PID调节
+u32 hRot_Speed_L;//左电机平均转速缓存
+u32 hRot_Speed_R;//右电机平均转速缓存
 unsigned short int hSpeedMeas_Timebase_500us = SPEED_SAMPLING_TIME;//电机编码数采集时间间隔
 float  Milemeter_L_Motor=0,Milemeter_R_Motor=0;//dt时间内的左右轮速度,用于里程计计算
 u8 bSpeed_Buffer_Index = 0;//缓存左右轮编码数到数组变量

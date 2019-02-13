@@ -76,9 +76,9 @@ void RightMotorStop(void)
 
 void ENC_Calc_Average_Speed(void)//计算三次电机的平均编码数
 {   
-    u32 i;
-	signed long long wtempLL=0;
-	signed long long wtempRR=0;
+    u8 i;
+	s32 wtempLL=0;
+	s32 wtempRR=0;
 
     //累加缓存次数内的速度值
 	for (i=0;i<SPEED_BUFFER_SIZE;i++)
@@ -90,20 +90,20 @@ void ENC_Calc_Average_Speed(void)//计算三次电机的平均编码数
     //取平均
 	wtempLL /= (SPEED_BUFFER_SIZE);
 	wtempRR /= (SPEED_BUFFER_SIZE);	
-    
+  
     //将平均脉冲数单位转为 r/min
 	wtempLL = (wtempLL * SPEED_SAMPLING_FREQ)*60/(ENCODER_L_PPR);
 	wtempRR = (wtempRR * SPEED_SAMPLING_FREQ)*60/(ENCODER_R_PPR); 
 
+
 	if(wtempLL < 0){wtempLL = 0 - wtempLL;}//转化为正数
 	if(wtempRR < 0){wtempRR = 0 - wtempRR;}//转化为正数
 	
-	hRot_Speed_L= ((s16)(wtempLL));//平均转速 r/min
-	hRot_Speed_R= ((s16)(wtempRR));//平均转速 r/min
-	SpeedL=hRot_Speed_L;//平均转速 r/min
-	SpeedR=hRot_Speed_R;//平均转速 r/min
+	hRot_Speed_L= ((u32)(wtempLL));//平均转速 r/min
+	hRot_Speed_R= ((u32)(wtempRR));//平均转速 r/min
+
 #ifdef DEBUG
-	printf("ENC_Calc_Average_Speed() SpeedL:%d,SpeedR:%d \r\n",SpeedL,SpeedR);
+	//printf("ENC_Calc_Average_Speed() SpeedL:%d,SpeedR:%d \r\n",hRot_Speed_L,hRot_Speed_R);
 #endif 
 
 }
@@ -150,7 +150,7 @@ float PID_calculate(struct PID *Control,float CurrentValue_left )//位置PID计算B
 void Gain_R(void)//设置右电机 PID调节
 {
     
-	span=1*(SpeedL-SpeedR);//采集回来的左右轮速度差值
+	span=1*(hRot_Speed_L-hRot_Speed_R);//采集回来的左右轮速度差值
 	pulse_R= pulse_R + PID_calculate(&Control_right,hRot_Speed_R);//PID调节
     
     //pwm幅度抑制
@@ -162,7 +162,7 @@ void Gain_R(void)//设置右电机 PID调节
 void Gain_L(void)//设置左电机 PID调节 
 {
     float pulse_L_IN1,pulse_L_IN2,pulse_R_IN1,pulse_R_IN2;
-	span=1*(SpeedR-SpeedL);//采集回来的左右轮速度差值
+	span=1*(hRot_Speed_R-hRot_Speed_L);//采集回来的左右轮速度差值
 	pulse_L= pulse_L + PID_calculate(&Control_left,hRot_Speed_L);//PID调节
     
     ////pwm 幅度抑制
@@ -207,9 +207,6 @@ void Gain_L(void)//设置左电机 PID调节
 
 void TIM3_IRQHandler(void)//小车速度计算定时器中断函数
 {
-#ifdef DEBUG
-	printf("enter Tim3 IRQ\r\n");
-#endif 
 	if ( TIM_GetITStatus(TIM3 , TIM_IT_Update) != RESET ) 
 	{						      
         if (hSpeedMeas_Timebase_500us !=0)//电机编码数采集时间间隔未到
@@ -265,7 +262,7 @@ void TIM3_IRQHandler(void)//小车速度计算定时器中断函数
 	}		 
 }
 
-void LeftMovingSpeedW(unsigned int val)//左轮方向和速度控制函数
+void LeftMovingSpeedW(int val)//左轮方向和速度控制函数
 {     
     if(val>10000)
     {  
@@ -291,7 +288,7 @@ void LeftMovingSpeedW(unsigned int val)//左轮方向和速度控制函数
 
 }
 
-void RightMovingSpeedW(unsigned int val2)//右轮方向和速度控制函数
+void RightMovingSpeedW(int val2)//右轮方向和速度控制函数
 {    
     if(val2>10000)
     {  
