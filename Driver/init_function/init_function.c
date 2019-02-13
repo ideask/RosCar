@@ -1,5 +1,7 @@
 #include "init_function.h"
 
+
+
 void SystemInit (void)
 {
 	__IO uint32_t HSIStartUpStatus = 0;
@@ -96,7 +98,7 @@ void UartInit(u32 bound)
 	//GPIO端口设置
 	GPIO_InitTypeDef GPIO_InitStructure;
 	USART_InitTypeDef USART_InitStructure;
-	NVIC_InitTypeDef NVIC_InitStructure;
+	//NVIC_InitTypeDef NVIC_InitStructure;
 	 
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1|RCC_APB2Periph_GPIOA, ENABLE);	//使能USART1，GPIOA时钟
 
@@ -110,13 +112,6 @@ void UartInit(u32 bound)
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;//PA10
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;//浮空输入
 	GPIO_Init(GPIOA, &GPIO_InitStructure);//初始化GPIOA.10  
-
-	//Usart1 NVIC 配置
-	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3 ;//抢占优先级3
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
-	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器
 
 	//USART 初始化设置
 
@@ -154,10 +149,10 @@ void IO_InfraredSendingTubeInit(void)
 	GPIO_Init(GPIOA, &GPIO_InitStructure);	
 }
 
-void IO_EXIT_LeftWheelSpeed(void)
+void IO_EXIT_LeftWheelSpeedInit(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
-	NVIC_InitTypeDef NVIC_InitStructure;
+	//NVIC_InitTypeDef NVIC_InitStructure;
 	EXTI_InitTypeDef EXTI_InitStructure;
 	//1.使能GPIOD和AFIO时钟,值得注意的是，当使用外部中断的时候必须使能AFIO时钟。
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD|RCC_APB2Periph_AFIO,ENABLE);
@@ -173,18 +168,41 @@ void IO_EXIT_LeftWheelSpeed(void)
 	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling;//上升下降沿触发
 	EXTI_InitStructure.EXTI_LineCmd = ENABLE;//使能中断线
 	EXTI_Init(&EXTI_InitStructure);//初始化中断
+#if 0
+
 	//4.中断向量
 	NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
+#endif
 }
 
-void IO_EXIT_RightWheelSpeed(void)
+void IO_EXIT_LeftWheelSpeed_DE(u8 enable_or_disable)
+{
+	NVIC_InitTypeDef NVIC_InitStructure;
+	if(enable_or_disable == ITENABLE)
+	{
+		NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;
+		NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+		NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+		NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+		NVIC_Init(&NVIC_InitStructure);	
+	}
+	else if(enable_or_disable == ITDISABLE)
+	{
+		NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;
+		NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+		NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+		NVIC_InitStructure.NVIC_IRQChannelCmd = DISABLE;
+		NVIC_Init(&NVIC_InitStructure);			
+	}
+}
+void IO_EXIT_RightWheelSpeedInit(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
-	NVIC_InitTypeDef NVIC_InitStructure;
+	//NVIC_InitTypeDef NVIC_InitStructure;
 	EXTI_InitTypeDef EXTI_InitStructure;
 	//1.使能GPIOE和AFIO时钟,值得注意的是，当使用外部中断的时候必须使能AFIO时钟。
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE|RCC_APB2Periph_AFIO,ENABLE);
@@ -200,11 +218,167 @@ void IO_EXIT_RightWheelSpeed(void)
 	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising_Falling;//上升下降沿触发
 	EXTI_InitStructure.EXTI_LineCmd = ENABLE;//使能中断线
 	EXTI_Init(&EXTI_InitStructure);//初始化中断
+#if 0
 	//4.中断向量
 	NVIC_InitStructure.NVIC_IRQChannel = EXTI4_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
+#endif
 }
+
+void IO_EXIT_RightWheelSpeed_DE(u8 enable_or_disable)
+{
+	NVIC_InitTypeDef NVIC_InitStructure;
+	if(enable_or_disable == ITENABLE)
+	{
+		NVIC_InitStructure.NVIC_IRQChannel = EXTI4_IRQn;
+		NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+		NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+		NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+		NVIC_Init(&NVIC_InitStructure);
+
+	}
+	else if(enable_or_disable == ITDISABLE)
+	{
+		NVIC_InitStructure.NVIC_IRQChannel = EXTI4_IRQn;
+		NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+		NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+		NVIC_InitStructure.NVIC_IRQChannelCmd = DISABLE;
+		NVIC_Init(&NVIC_InitStructure);
+
+	}	
+}
+
+void TIM3_SpeedCalculate_Init(void)//速度计算定时器初始化
+{
+   TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3 , ENABLE); 
+	
+   /* 自动重装载寄存器周期的值(计数值) */
+   TIM_TimeBaseStructure.TIM_Period=3999;  //0.5ms 2000hz
+	
+   /* 累计 TIM_Period个频率后产生一个更新或者中断 */
+   TIM_TimeBaseStructure.TIM_Prescaler= 7;
+	
+   /* 对外部时钟进行采样的时钟分频,这里没有用到 */
+   TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1;	
+   TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; 
+   TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
+	
+   TIM_ClearFlag(TIM3, TIM_FLAG_Update);
+   TIM_ITConfig(TIM3,TIM_IT_Update,ENABLE);		
+   TIM_Cmd(TIM3, ENABLE);			
+}
+
+void TIM1_OdomUpdate_Init(void)//里程计发布定时器初始化
+{
+   TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+   RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1 , ENABLE);
+   TIM_DeInit(TIM1);
+	
+
+   /* 自动重装载寄存器周期的值(计数值) */ 
+   TIM_TimeBaseStructure.TIM_Period=399;  //20HZ  500*100us=50ms 
+   TIM_TimeBaseStructure.TIM_Prescaler=7999; 
+	
+	 /* 对外部时钟进行采样的时钟分频,这里没有用到 */
+   TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1;	
+   TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up; 
+   TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
+	
+   TIM_ClearFlag(TIM1, TIM_FLAG_Update);
+   TIM_ITConfig(TIM1,TIM_IT_Update,ENABLE);		
+   TIM_Cmd(TIM1, ENABLE);	
+}
+
+void NVIC_Configuration(void)//优先级配置
+{
+    NVIC_InitTypeDef NVIC_InitStructure;	
+    NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x0);//将中断矢量放到Flash的0地址
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);//设置优先级配置的模式,第1组:抢占优先级0(0:7),抢占优先级1(0:7),
+
+    /****************************使能串口1中断，并设置优先级***********************/
+    NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;			   //USART1全局中断
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;	   //先占优先级 1
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;	           //从占优先级 2
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;  		 	   //使能中断
+    NVIC_Init(&NVIC_InitStructure);	     	
+		  	
+	
+	NVIC_InitStructure.NVIC_IRQChannel =EXTI4_IRQn;                //(右)码盘外部中断函数
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1; 
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+
+    NVIC_InitStructure.NVIC_IRQChannel =EXTI15_10_IRQn;             //(左)码盘外部中断函数
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0; 
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+                                                        
+    NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;	
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+	 
+    NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;	  
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 4;	
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+}	
+
+void USART1_IRQHandler(void)//串口中断函数
+{
+	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) //是否接受到数据
+    {
+		serial_rec =USART_ReceiveData(USART1);//(USART1->DR);	//读取接收到的数据
+					
+		if((USART_RX_STA&0x8000)==0)//接收未完成
+        {
+            if(USART_RX_STA&0x4000)//接收到了0x0d
+            {
+                if(serial_rec==0x0a)
+                {
+                    if((USART_RX_STA&0x3f)==8)
+                    {							
+                        USART_RX_STA|=0x8000;	//接收完成了 
+                        main_sta|=0x04;
+                        main_sta&=0xF7;
+                    }
+                    else
+                    {
+                        main_sta|=0x08;
+                        main_sta&=0xFB;
+                        USART_RX_STA=0;//接收错误,重新开始
+                    }
+                }
+                else 
+                {
+                    main_sta|=0x08;
+                    USART_RX_STA=0;//接收错误,重新开始
+                }
+            }
+            else //还没收到0X0D
+            {	
+                if(serial_rec==0x0d)USART_RX_STA|=0x4000;
+                else
+                {
+                    USART_RX_BUF[USART_RX_STA&0X3FFF]=serial_rec ;
+                    USART_RX_STA++;
+                    if(USART_RX_STA>(USART_REC_LEN-1))
+                    {
+                        main_sta|=0x08;
+                        USART_RX_STA=0;//接收数据错误,重新开始接收
+                    }							
+                }		 
+            }
+        }   		 
+    }
+}
+
 

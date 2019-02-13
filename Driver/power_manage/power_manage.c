@@ -1,6 +1,7 @@
 #include "power_manage.h"
 
 
+
 void PeripheralPowerOnOff(u8 OnOff)
 {
 	if(OnOff == 1)

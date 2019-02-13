@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_MD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\User;..\Core;..\Hal\inc;..\Driver\auto_charge;..\Driver\data_commun;..\Driver\encoder_data;..\Driver\imu_data;..\Driver\init_function;..\Driver\moto_control;..\Driver\power_manage</IncludePath>
+              <IncludePath>..\User;..\Core;..\Hal\inc;..\Driver\auto_charge;..\Driver\data_commun;..\Driver\encoder_data;..\Driver\imu_data;..\Driver\init_function;..\Driver\moto_control;..\Driver\power_manage;..\Driver\golbal_variable;..\Driver\odometry;..\Driver\includes</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -587,6 +587,16 @@
               <FileName>power_manage.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Driver\power_manage\power_manage.c</FilePath>
+            </File>
+            <File>
+              <FileName>golbal_variable.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Driver\golbal_variable\golbal_variable.c</FilePath>
+            </File>
+            <File>
+              <FileName>odometry.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Driver\odometry\odometry.c</FilePath>
             </File>
           </Files>
         </Group>
